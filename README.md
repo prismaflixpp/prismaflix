@@ -5,45 +5,47 @@
 <title>Vídeo Fullscreen</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-  html, body { margin:0; height:100%; background:black; display:flex; justify-content:center; align-items:center; }
-  #videoContainer { position: relative; width: 100%; height: 100%; }
-  video { width: 100%; height: 100%; }
-  #playBtn {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 120px;      /* Ícone gigante */
-    color: white;          /* Cor do ícone */
-    background: rgba(0,0,0,0.6); /* Fundo semi-transparente */
-    border: none;
-    border-radius: 50%;
-    width: 150px; height: 150px; /* Botão circular */
+  html, body { margin:0; height:100%; background:black; overflow: hidden; }
+  #videoPlayer { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+  }
+  #overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8); /* escurece tudo */
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 10;
     cursor: pointer;
+  }
+  #overlay i {
+    font-size: 120px;
+    color: white;
   }
 </style>
 </head>
 <body>
 
-<div id="videoContainer">
-  <video id="videoPlayer" controls></video>
-  <button id="playBtn"><i class="fas fa-play"></i></button>
-</div>
+<video id="videoPlayer" controls></video>
+
+<div id="overlay"><i class="fas fa-play"></i></div>
 
 <script>
 const params = new URLSearchParams(window.location.search);
 const videoLink = params.get('link');
 const video = document.getElementById('videoPlayer');
-const playBtn = document.getElementById('playBtn');
+const overlay = document.getElementById('overlay');
 
 if(videoLink) video.src = videoLink;
 
-playBtn.addEventListener('click', () => {
+overlay.addEventListener('click', () => {
   video.play();
   if(video.requestFullscreen) video.requestFullscreen();
-  playBtn.style.display = 'none'; // esconde o botão
+  overlay.style.display = 'none'; // remove overlay
 });
 </script>
 
